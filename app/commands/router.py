@@ -8,322 +8,278 @@ class CommandRouter:
     def __init__(self):
 
         # ====================================================
-        # OPEN VS CODE
+        # APPLICATIONS
         # ====================================================
 
         self.open_vscode_phrases = [
-
-            # English
             "open vs code",
             "open vscode",
             "open visual studio code",
-
-            # Roman Urdu
             "vs code kholo",
             "vs code khol do",
-            "vs code kholna",
             "vscode kholo",
             "vscode khol do",
-
-            # Urdu
             "وی ایس کوڈ کھولو",
             "وی ایس کوڈ کھول دو",
-            "وی ایس کوڈ کھولیں",
-
-            # Punjabi
-            "وی ایس کوڈ کھول دے",
-            "وی ایس کوڈ کھول دیو",
-
-            # Roman Punjabi
             "vs code khol de",
             "vs code khol deo",
-            "vs code khol dyo",
-            "vscode khol de",
-            "vscode khol deo",
-
-            # Saraiki
             "vs code open kar",
             "vs code open kr",
-            "vs code open kar dai",
-            "vscode open kr deo",
         ]
 
-        # ====================================================
-        # CLOSE VS CODE
-        # ====================================================
-
         self.close_vscode_phrases = [
-
-            # English
             "close vs code",
             "close vscode",
             "close visual studio code",
-
-            # Roman Urdu
             "vs code band karo",
             "vs code band kar do",
-            "vs code band karna",
             "vscode band karo",
             "vscode band kar do",
-
-            # Urdu
             "وی ایس کوڈ بند کرو",
             "وی ایس کوڈ بند کر دو",
-            "وی ایس کوڈ بند کریں",
-
-            # Punjabi
-            "وی ایس کوڈ بند کر دے",
-            "وی ایس کوڈ بند کرو",
-
-            # Roman Punjabi
             "vs code band kar de",
             "vs code band kar deo",
-            "vs code band dyo",
-            "vscode band kar de",
-            "vscode band kar deo",
-
-            # Saraiki
-            "vs code band kr",
-            "vs code band kar",
-            "vs code band kro",
-            "vscode band karo",
         ]
 
-        # ====================================================
-        # OPEN CHROME
-        # ====================================================
-
         self.open_chrome_phrases = [
-
-            # English
             "open chrome",
             "open google chrome",
             "start chrome",
-
-            # Roman Urdu
             "chrome kholo",
             "chrome khol do",
             "chrome kholna",
-
-            # Roman Punjabi
             "chrome khol de",
             "chrome khol deo",
-            "chrome khol dyo",
-
-            # Urdu
             "کروم کھولو",
             "کروم کھول دو",
-            "کروم کھولیں",
-
-            # Saraiki
             "chrome open kar",
             "chrome open kr",
-            "chrome open kar dai",
         ]
 
-        # ====================================================
-        # CLOSE CHROME
-        # ====================================================
-
         self.close_chrome_phrases = [
-
-            # English
             "close chrome",
             "close google chrome",
             "exit chrome",
-
-            # Roman Urdu
             "chrome band karo",
             "chrome band kar do",
-
-            # Roman Punjabi
             "chrome band kar de",
             "chrome band kar deo",
-            "chrome band dyo",
-
-            # Urdu
             "کروم بند کرو",
             "کروم بند کر دو",
-            "کروم بند کریں",
-
-            # Saraiki
-            "chrome band kr",
-            "chrome band kar",
-            "chrome band kro",
         ]
 
-        # ====================================================
-        # OPEN CALCULATOR
-        # ====================================================
-
         self.open_calculator_phrases = [
-
-            # English
             "open calculator",
             "start calculator",
-
-            # Roman Urdu
             "calculator kholo",
             "calculator khol do",
             "calculator kholna",
-
-            # Roman Punjabi
             "calculator khol de",
             "calculator khol deo",
-
-            # Urdu
             "کیلکولیٹر کھولو",
             "کیلکولیٹر کھول دو",
-            "کیلکولیٹر کھولیں",
-
-            # Saraiki
-            "calculator open kar",
-            "calculator open kr",
         ]
-
-        # ====================================================
-        # CLOSE CALCULATOR
-        # ====================================================
 
         self.close_calculator_phrases = [
-
-            # English
             "close calculator",
             "exit calculator",
-
-            # Roman Urdu
             "calculator band karo",
             "calculator band kar do",
-
-            # Roman Punjabi
             "calculator band kar de",
             "calculator band kar deo",
-
-            # Urdu
             "کیلکولیٹر بند کرو",
             "کیلکولیٹر بند کر دو",
-            "کیلکولیٹر بند کریں",
-
-            # Saraiki
-            "calculator band kr",
-            "calculator band kar",
         ]
 
-        # ====================================================
-        # OPEN NOTEPAD
-        # ====================================================
-
         self.open_notepad_phrases = [
-
-            # English
             "open notepad",
             "start notepad",
-
-            # Roman Urdu
             "notepad kholo",
             "notepad khol do",
             "notepad kholna",
-
-            # Roman Punjabi
             "notepad khol de",
             "notepad khol deo",
-
-            # Urdu
             "نوٹ پیڈ کھولو",
             "نوٹ پیڈ کھول دو",
-            "نوٹ پیڈ کھولیں",
-
-            # Saraiki
-            "notepad open kar",
-            "notepad open kr",
         ]
-
-        # ====================================================
-        # CLOSE NOTEPAD
-        # ====================================================
 
         self.close_notepad_phrases = [
-
-            # English
             "close notepad",
             "exit notepad",
-
-            # Roman Urdu
             "notepad band karo",
             "notepad band kar do",
-
-            # Roman Punjabi
             "notepad band kar de",
             "notepad band kar deo",
-
-            # Urdu
             "نوٹ پیڈ بند کرو",
             "نوٹ پیڈ بند کر دو",
-            "نوٹ پیڈ بند کریں",
-
-            # Saraiki
-            "notepad band kr",
-            "notepad band kar",
         ]
 
-        # ====================================================
-        # OPEN FILE EXPLORER
-        # ====================================================
-
         self.open_explorer_phrases = [
-
-            # English
             "open file explorer",
             "open explorer",
             "open files",
-
-            # Roman Urdu
             "file explorer kholo",
             "file explorer khol do",
             "files kholo",
-
-            # Roman Punjabi
             "file explorer khol de",
             "file explorer khol deo",
-
-            # Urdu
             "فائل ایکسپلورر کھولو",
             "فائل ایکسپلورر کھول دو",
+        ]
 
-            # Saraiki
-            "file explorer open kar",
-            "file explorer open kr",
+        self.close_explorer_phrases = [
+            "close file explorer",
+            "close explorer",
+            "file explorer band karo",
+            "file explorer band kar do",
+            "file explorer band kar de",
+            "file explorer band kar deo",
+            "فائل ایکسپلورر بند کرو",
+            "فائل ایکسپلورر بند کر دو",
         ]
 
         # ====================================================
-        # CLOSE FILE EXPLORER
+        # FOLDERS
         # ====================================================
 
-        self.close_explorer_phrases = [
+        self.downloads_phrases = [
+            "open downloads",
+            "open download",
+            "downloads kholo",
+            "downloads khol do",
+            "download kholo",
+            "download khol do",
+            "downloads open kar",
+            "downloads open kr",
+            "ڈاؤن لوڈز کھولو",
+            "ڈاؤن لوڈ کھولو",
+        ]
 
-            # English
-            "close file explorer",
-            "close explorer",
+        self.desktop_phrases = [
+            "open desktop",
+            "desktop kholo",
+            "desktop khol do",
+            "desktop open kar",
+            "desktop open kr",
+            "ڈیسک ٹاپ کھولو",
+            "ڈیسک ٹاپ کھول دو",
+        ]
 
-            # Roman Urdu
-            "file explorer band karo",
-            "file explorer band kar do",
+        self.documents_phrases = [
+            "open documents",
+            "open document",
+            "documents kholo",
+            "documents khol do",
+            "documents open kar",
+            "documents open kr",
+            "دستاویزات کھولو",
+            "ڈاکومنٹس کھولو",
+        ]
 
-            # Roman Punjabi
-            "file explorer band kar de",
-            "file explorer band kar deo",
+        self.pictures_phrases = [
+            "open pictures",
+            "open picture folder",
+            "pictures kholo",
+            "pictures khol do",
+            "pictures open kar",
+            "pictures open kr",
+            "تصاویر کھولو",
+        ]
 
-            # Urdu
-            "فائل ایکسپلورر بند کرو",
-            "فائل ایکسپلورر بند کر دو",
+        # ====================================================
+        # SYSTEM
+        # ====================================================
 
-            # Saraiki
-            "file explorer band kr",
-            "file explorer band kar",
+        self.lock_phrases = [
+            "lock computer",
+            "lock pc",
+            "lock my computer",
+            "computer lock karo",
+            "pc lock karo",
+            "computer lock kar do",
+            "کمپیوٹر لاک کرو",
+            "کمپیوٹر لاک کر دو",
+        ]
+
+        self.screenshot_phrases = [
+            "take screenshot",
+            "capture screenshot",
+            "screenshot lo",
+            "screenshot le lo",
+            "screenshot lein",
+            "screenshot bana do",
+            "اسکرین شاٹ لو",
+            "اسکرین شاٹ لے لو",
+        ]
+
+        self.volume_up_phrases = [
+            "volume",
+            "volume teez karo",
+            "volume up",
+            "increase volume",
+            "volume barhao",
+            "awaz barhao",
+            "آواز بڑھاؤ",
+            "والیوم بڑھاؤ",
+        ]
+
+        self.volume_down_phrases = [
+            "volume down",
+            "decrease volume",
+            "volume kam karo",
+            "awaz kam karo",
+            "آواز کم کرو",
+            "والیوم کم کرو",
+        ]
+
+        self.mute_phrases = [
+            "mute",
+            "mute volume",
+            "sound mute karo",
+            "awaz band karo",
+            "آواز بند کرو",
+            "میوٹ کرو",
+        ]
+
+        self.play_pause_phrases = [
+            "play music",
+            "pause music",
+            "play pause",
+            "play or pause",
+            "music chalao",
+            "music roko",
+            "music pause karo",
+            "میوزک چلاؤ",
+            "میوزک روکو",
+        ]
+
+        # ====================================================
+        # POWER
+        # ====================================================
+
+        self.shutdown_phrases = [
+            "shutdown computer",
+            "shutdown pc",
+            "shut down computer",
+            "shut down pc",
+            "computer shutdown karo",
+            "pc shutdown karo",
+            "کمپیوٹر بند کرو",
+            "کمپیوٹر شٹ ڈاؤن کرو",
+        ]
+
+        self.restart_phrases = [
+            "restart computer",
+            "restart pc",
+            "reboot computer",
+            "computer restart karo",
+            "pc restart karo",
+            "کمپیوٹر ری اسٹارٹ کرو",
+            "کمپیوٹر دوبارہ شروع کرو",
         ]
 
     # ========================================================
-    # ROUTE COMMAND
+    # ROUTE
     # ========================================================
 
     def route(self, command):
@@ -333,9 +289,9 @@ class CommandRouter:
 
         command = command.lower().strip()
 
-        # ----------------------------------------------------
-        # OPEN VS CODE
-        # ----------------------------------------------------
+        # ====================================================
+        # VS CODE
+        # ====================================================
 
         if any(
             phrase in command
@@ -343,19 +299,15 @@ class CommandRouter:
         ):
             return "OPEN_VSCODE"
 
-        # ----------------------------------------------------
-        # CLOSE VS CODE
-        # ----------------------------------------------------
-
         if any(
             phrase in command
             for phrase in self.close_vscode_phrases
         ):
             return "CLOSE_VSCODE"
 
-        # ----------------------------------------------------
-        # OPEN CHROME
-        # ----------------------------------------------------
+        # ====================================================
+        # CHROME
+        # ====================================================
 
         if any(
             phrase in command
@@ -363,19 +315,15 @@ class CommandRouter:
         ):
             return "OPEN_CHROME"
 
-        # ----------------------------------------------------
-        # CLOSE CHROME
-        # ----------------------------------------------------
-
         if any(
             phrase in command
             for phrase in self.close_chrome_phrases
         ):
             return "CLOSE_CHROME"
 
-        # ----------------------------------------------------
-        # OPEN CALCULATOR
-        # ----------------------------------------------------
+        # ====================================================
+        # CALCULATOR
+        # ====================================================
 
         if any(
             phrase in command
@@ -383,19 +331,15 @@ class CommandRouter:
         ):
             return "OPEN_CALCULATOR"
 
-        # ----------------------------------------------------
-        # CLOSE CALCULATOR
-        # ----------------------------------------------------
-
         if any(
             phrase in command
             for phrase in self.close_calculator_phrases
         ):
             return "CLOSE_CALCULATOR"
 
-        # ----------------------------------------------------
-        # OPEN NOTEPAD
-        # ----------------------------------------------------
+        # ====================================================
+        # NOTEPAD
+        # ====================================================
 
         if any(
             phrase in command
@@ -403,19 +347,15 @@ class CommandRouter:
         ):
             return "OPEN_NOTEPAD"
 
-        # ----------------------------------------------------
-        # CLOSE NOTEPAD
-        # ----------------------------------------------------
-
         if any(
             phrase in command
             for phrase in self.close_notepad_phrases
         ):
             return "CLOSE_NOTEPAD"
 
-        # ----------------------------------------------------
-        # OPEN FILE EXPLORER
-        # ----------------------------------------------------
+        # ====================================================
+        # FILE EXPLORER
+        # ====================================================
 
         if any(
             phrase in command
@@ -423,18 +363,98 @@ class CommandRouter:
         ):
             return "OPEN_EXPLORER"
 
-        # ----------------------------------------------------
-        # CLOSE FILE EXPLORER
-        # ----------------------------------------------------
-
         if any(
             phrase in command
             for phrase in self.close_explorer_phrases
         ):
             return "CLOSE_EXPLORER"
 
-        # ----------------------------------------------------
+        # ====================================================
+        # FOLDERS
+        # ====================================================
+
+        if any(
+            phrase in command
+            for phrase in self.downloads_phrases
+        ):
+            return "OPEN_DOWNLOADS"
+
+        if any(
+            phrase in command
+            for phrase in self.desktop_phrases
+        ):
+            return "OPEN_DESKTOP"
+
+        if any(
+            phrase in command
+            for phrase in self.documents_phrases
+        ):
+            return "OPEN_DOCUMENTS"
+
+        if any(
+            phrase in command
+            for phrase in self.pictures_phrases
+        ):
+            return "OPEN_PICTURES"
+
+        # ====================================================
+        # SYSTEM
+        # ====================================================
+
+        if any(
+            phrase in command
+            for phrase in self.lock_phrases
+        ):
+            return "LOCK_COMPUTER"
+
+        if any(
+            phrase in command
+            for phrase in self.screenshot_phrases
+        ):
+            return "TAKE_SCREENSHOT"
+
+        if any(
+            phrase in command
+            for phrase in self.volume_up_phrases
+        ):
+            return "VOLUME_UP"
+
+        if any(
+            phrase in command
+            for phrase in self.volume_down_phrases
+        ):
+            return "VOLUME_DOWN"
+
+        if any(
+            phrase in command
+            for phrase in self.mute_phrases
+        ):
+            return "MUTE"
+
+        if any(
+            phrase in command
+            for phrase in self.play_pause_phrases
+        ):
+            return "PLAY_PAUSE"
+
+        # ====================================================
+        # POWER
+        # ====================================================
+
+        if any(
+            phrase in command
+            for phrase in self.shutdown_phrases
+        ):
+            return "SHUTDOWN"
+
+        if any(
+            phrase in command
+            for phrase in self.restart_phrases
+        ):
+            return "RESTART"
+
+        # ====================================================
         # UNKNOWN
-        # ----------------------------------------------------
+        # ====================================================
 
         return None

@@ -1,94 +1,135 @@
 import subprocess
 import os
 
-
 from app.commands.router import CommandRouter
+from app.services.system import SystemService
+from app.services.files import FileService
 
 
 class CommandExecutor:
 
     def __init__(self):
+
         self.router = CommandRouter()
+
+        self.system = SystemService()
+
+        self.files = FileService()
+
+    # ========================================================
+    # MAIN EXECUTOR
+    # ========================================================
 
     def execute(self, command):
 
         if not command:
+
             return "I didn't hear a command."
 
-        action = self.router.route(command)
+        action = self.router.route(
+            command
+        )
+
+        print(
+            f"NOVA EXECUTOR: Command = {command}"
+        )
+
+        print(
+            f"NOVA EXECUTOR: Action = {action}"
+        )
 
         # ====================================================
-        # OPEN VS CODE
+        # APPLICATIONS
         # ====================================================
 
         if action == "OPEN_VSCODE":
             return self.open_vscode()
 
-        # ====================================================
-        # CLOSE VS CODE
-        # ====================================================
-
         if action == "CLOSE_VSCODE":
             return self.close_vscode()
-
-        # ====================================================
-        # OPEN CHROME
-        # ====================================================
 
         if action == "OPEN_CHROME":
             return self.open_chrome()
 
-        # ====================================================
-        # CLOSE CHROME
-        # ====================================================
-
         if action == "CLOSE_CHROME":
             return self.close_chrome()
-
-        # ====================================================
-        # OPEN CALCULATOR
-        # ====================================================
 
         if action == "OPEN_CALCULATOR":
             return self.open_calculator()
 
-        # ====================================================
-        # CLOSE CALCULATOR
-        # ====================================================
-
         if action == "CLOSE_CALCULATOR":
             return self.close_calculator()
-
-        # ====================================================
-        # OPEN NOTEPAD
-        # ====================================================
 
         if action == "OPEN_NOTEPAD":
             return self.open_notepad()
 
-        # ====================================================
-        # CLOSE NOTEPAD
-        # ====================================================
-
         if action == "CLOSE_NOTEPAD":
             return self.close_notepad()
 
-        # ====================================================
-        # OPEN FILE EXPLORER
-        # ====================================================
-
         if action == "OPEN_EXPLORER":
             return self.open_explorer()
-
-        # ====================================================
-        # CLOSE FILE EXPLORER
-        # ====================================================
 
         if action == "CLOSE_EXPLORER":
             return self.close_explorer()
 
         # ====================================================
-        # UNKNOWN COMMAND
+        # FOLDERS
+        # ====================================================
+
+        if action == "OPEN_DOWNLOADS":
+            return self.files.open_downloads()
+
+        if action == "OPEN_DESKTOP":
+            return self.files.open_desktop()
+
+        if action == "OPEN_DOCUMENTS":
+            return self.files.open_documents()
+
+        if action == "OPEN_PICTURES":
+            return self.files.open_pictures()
+
+        # ====================================================
+        # SYSTEM
+        # ====================================================
+
+        if action == "LOCK_COMPUTER":
+            return self.system.lock_computer()
+
+        if action == "TAKE_SCREENSHOT":
+            return self.system.take_screenshot()
+
+        if action == "VOLUME_UP":
+            return self.system.volume_up()
+
+        if action == "VOLUME_DOWN":
+            return self.system.volume_down()
+
+        if action == "MUTE":
+            return self.system.mute()
+
+        if action == "PLAY_PAUSE":
+            return self.system.play_pause()
+
+        # ====================================================
+        # POWER
+        # ====================================================
+
+        if action == "SHUTDOWN":
+
+            return (
+                "Shutdown command recognized. "
+                "Confirmation will be required."
+            )
+
+        if action == "RESTART":
+
+            return (
+                "Restart command recognized. "
+                "Confirmation will be required."
+            )
+
+        # ====================================================
+        # UNKNOWN
         # ====================================================
 
         return (
@@ -97,7 +138,7 @@ class CommandExecutor:
         )
 
     # ========================================================
-    # OPEN VS CODE
+    # VS CODE
     # ========================================================
 
     def open_vscode(self):
@@ -109,17 +150,30 @@ class CommandExecutor:
         if os.path.exists(vscode_path):
 
             try:
-                subprocess.Popen([vscode_path])
 
-                return "Opening Visual Studio Code."
+                subprocess.Popen(
+                    [vscode_path]
+                )
+
+                return (
+                    "Opening Visual Studio Code."
+                )
 
             except Exception as error:
 
-                print(f"VS Code error: {error}")
+                print(
+                    f"VS Code error: {error}"
+                )
 
-                return "I couldn't open Visual Studio Code."
+                return (
+                    "I couldn't open "
+                    "Visual Studio Code."
+                )
 
-        return "I couldn't find Visual Studio Code."
+        return (
+            "I couldn't find "
+            "Visual Studio Code."
+        )
 
     # ========================================================
     # CLOSE VS CODE
@@ -128,136 +182,191 @@ class CommandExecutor:
     def close_vscode(self):
 
         subprocess.run(
-            ["taskkill", "/IM", "Code.exe", "/F"],
+            [
+                "taskkill",
+                "/IM",
+                "Code.exe",
+                "/F"
+            ],
             capture_output=True
         )
 
-        return "Closing Visual Studio Code."
+        return (
+            "Closing Visual Studio Code."
+        )
 
     # ========================================================
-    # OPEN CHROME
+    # CHROME
     # ========================================================
 
     def open_chrome(self):
 
         try:
+
             subprocess.Popen(
-                ["cmd", "/c", "start", "", "chrome"]
+                [
+                    "cmd",
+                    "/c",
+                    "start",
+                    "",
+                    "chrome"
+                ]
             )
 
-            return "Opening Google Chrome."
+            return (
+                "Opening Google Chrome."
+            )
 
         except Exception as error:
 
-            print(f"Chrome error: {error}")
+            print(
+                f"Chrome error: {error}"
+            )
 
-            return "I couldn't open Google Chrome."
-
-    # ========================================================
-    # CLOSE CHROME
-    # ========================================================
+            return (
+                "I couldn't open "
+                "Google Chrome."
+            )
 
     def close_chrome(self):
 
         subprocess.run(
-            ["taskkill", "/IM", "chrome.exe", "/F"],
+            [
+                "taskkill",
+                "/IM",
+                "chrome.exe",
+                "/F"
+            ],
             capture_output=True
         )
 
-        return "Closing Google Chrome."
+        return (
+            "Closing Google Chrome."
+        )
 
     # ========================================================
-    # OPEN CALCULATOR
+    # CALCULATOR
     # ========================================================
 
     def open_calculator(self):
 
         try:
+
             subprocess.Popen(
                 ["calc.exe"]
             )
 
-            return "Opening Calculator."
+            return (
+                "Opening Calculator."
+            )
 
         except Exception as error:
 
-            print(f"Calculator error: {error}")
+            print(
+                f"Calculator error: {error}"
+            )
 
-            return "I couldn't open Calculator."
-
-    # ========================================================
-    # CLOSE CALCULATOR
-    # ========================================================
+            return (
+                "I couldn't open Calculator."
+            )
 
     def close_calculator(self):
 
         subprocess.run(
-            ["taskkill", "/IM", "CalculatorApp.exe", "/F"],
+            [
+                "taskkill",
+                "/IM",
+                "CalculatorApp.exe",
+                "/F"
+            ],
             capture_output=True
         )
 
-        return "Closing Calculator."
+        return (
+            "Closing Calculator."
+        )
 
     # ========================================================
-    # OPEN NOTEPAD
+    # NOTEPAD
     # ========================================================
 
     def open_notepad(self):
 
         try:
+
             subprocess.Popen(
                 ["notepad.exe"]
             )
 
-            return "Opening Notepad."
+            return (
+                "Opening Notepad."
+            )
 
         except Exception as error:
 
-            print(f"Notepad error: {error}")
+            print(
+                f"Notepad error: {error}"
+            )
 
-            return "I couldn't open Notepad."
-
-    # ========================================================
-    # CLOSE NOTEPAD
-    # ========================================================
+            return (
+                "I couldn't open Notepad."
+            )
 
     def close_notepad(self):
 
         subprocess.run(
-            ["taskkill", "/IM", "notepad.exe", "/F"],
+            [
+                "taskkill",
+                "/IM",
+                "notepad.exe",
+                "/F"
+            ],
             capture_output=True
         )
 
-        return "Closing Notepad."
+        return (
+            "Closing Notepad."
+        )
 
     # ========================================================
-    # OPEN FILE EXPLORER
+    # FILE EXPLORER
     # ========================================================
 
     def open_explorer(self):
 
         try:
+
             subprocess.Popen(
                 ["explorer.exe"]
             )
 
-            return "Opening File Explorer."
+            return (
+                "Opening File Explorer."
+            )
 
         except Exception as error:
 
-            print(f"File Explorer error: {error}")
+            print(
+                f"File Explorer error: {error}"
+            )
 
-            return "I couldn't open File Explorer."
-
-    # ========================================================
-    # CLOSE FILE EXPLORER
-    # ========================================================
+            return (
+                "I couldn't open "
+                "File Explorer."
+            )
 
     def close_explorer(self):
 
         subprocess.run(
-            ["taskkill", "/IM", "explorer.exe", "/F"],
+            [
+                "taskkill",
+                "/IM",
+                "explorer.exe",
+                "/F"
+            ],
             capture_output=True
         )
 
-        return "Closing File Explorer."
+        return (
+            "Closing File Explorer."
+        )
