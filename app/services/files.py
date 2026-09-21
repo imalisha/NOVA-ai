@@ -1,6 +1,7 @@
 import os
 import subprocess
 import winreg
+import time
 
 
 class FileService:
@@ -28,9 +29,7 @@ class FileService:
                     name
                 )
 
-                return os.path.expandvars(
-                    value
-                )
+                return os.path.expandvars(value)
 
         except Exception as error:
 
@@ -44,11 +43,7 @@ class FileService:
     # OPEN FOLDER
     # ========================================================
 
-    def open_folder(
-        self,
-        path,
-        folder_name
-    ):
+    def open_folder(self, path, folder_name):
 
         if not path:
 
@@ -89,6 +84,76 @@ class FileService:
             )
 
     # ========================================================
+    # CLOSE FOLDER WINDOW
+    # ========================================================
+
+    def close_folder(self, path, folder_name):
+
+        if not path:
+
+            return (
+                f"I couldn't find your "
+                f"{folder_name} folder."
+            )
+
+        try:
+
+            # PowerShell closes only the Explorer
+            # window displaying this exact folder.
+            escaped_path = path.replace(
+                "'",
+                "''"
+            )
+
+            powershell_command = (
+                "$shell = New-Object -ComObject Shell.Application; "
+                f"$windows = $shell.Windows(); "
+                "foreach ($window in $windows) { "
+                "try { "
+                "$url = $window.Document.Folder.Self.Path; "
+                f"if ($url -eq '{escaped_path}') {{ "
+                "$window.Quit() "
+                "} "
+                "} catch {} "
+                "}"
+            )
+
+            result = subprocess.run(
+                [
+                    "powershell",
+                    "-NoProfile",
+                    "-ExecutionPolicy",
+                    "Bypass",
+                    "-Command",
+                    powershell_command
+                ],
+                capture_output=True,
+                text=True
+            )
+
+            if result.returncode == 0:
+
+                return (
+                    f"Closing {folder_name}."
+                )
+
+            return (
+                f"I couldn't close "
+                f"{folder_name}."
+            )
+
+        except Exception as error:
+
+            print(
+                f"Close folder error: {error}"
+            )
+
+            return (
+                f"I couldn't close "
+                f"{folder_name}."
+            )
+
+    # ========================================================
     # DESKTOP
     # ========================================================
 
@@ -99,6 +164,17 @@ class FileService:
         )
 
         return self.open_folder(
+            path,
+            "Desktop"
+        )
+
+    def close_desktop(self):
+
+        path = self.get_windows_folder(
+            "Desktop"
+        )
+
+        return self.close_folder(
             path,
             "Desktop"
         )
@@ -118,6 +194,17 @@ class FileService:
             "Documents"
         )
 
+    def close_documents(self):
+
+        path = self.get_windows_folder(
+            "Personal"
+        )
+
+        return self.close_folder(
+            path,
+            "Documents"
+        )
+
     # ========================================================
     # PICTURES
     # ========================================================
@@ -133,13 +220,23 @@ class FileService:
             "Pictures"
         )
 
+    def close_pictures(self):
+
+        path = self.get_windows_folder(
+            "My Pictures"
+        )
+
+        return self.close_folder(
+            path,
+            "Pictures"
+        )
+
     # ========================================================
     # DOWNLOADS
     # ========================================================
 
     def open_downloads(self):
 
-        # Windows Downloads folder GUID
         downloads_key = (
             "{374DE290-123F-4565-9164-39C4925E467B}"
         )
@@ -149,6 +246,21 @@ class FileService:
         )
 
         return self.open_folder(
+            path,
+            "Downloads"
+        )
+
+    def close_downloads(self):
+
+        downloads_key = (
+            "{374DE290-123F-4565-9164-39C4925E467B}"
+        )
+
+        path = self.get_windows_folder(
+            downloads_key
+        )
+
+        return self.close_folder(
             path,
             "Downloads"
         )

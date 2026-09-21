@@ -79,14 +79,26 @@ class CommandExecutor:
         if action == "OPEN_DOWNLOADS":
             return self.files.open_downloads()
 
+        if action == "CLOSE_DOWNLOADS":
+            return self.files.close_downloads()
+
         if action == "OPEN_DESKTOP":
             return self.files.open_desktop()
+
+        if action == "CLOSE_DESKTOP":
+            return self.files.close_desktop()
 
         if action == "OPEN_DOCUMENTS":
             return self.files.open_documents()
 
+        if action == "CLOSE_DOCUMENTS":
+            return self.files.close_documents()
+
         if action == "OPEN_PICTURES":
             return self.files.open_pictures()
+
+        if action == "CLOSE_PICTURES":
+            return self.files.close_pictures()
 
         # ====================================================
         # SYSTEM

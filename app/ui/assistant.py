@@ -370,3 +370,52 @@ class AssistantPage(QWidget):
             )
 
         self.input_box.clear()
+    # ============================================================
+    # NOVA LIVE STATUS
+    # ============================================================
+
+    def update_status(self, status):
+
+        status_map = {
+
+            "WAITING": (
+                "◉  WAITING FOR NOVA",
+                "Listening for wake word..."
+            ),
+
+            "LISTENING": (
+                "◉  LISTENING...",
+                "Speak your command..."
+            ),
+
+            "PROCESSING": (
+                "◉  PROCESSING...",
+                "Understanding your request..."
+            ),
+
+            "EXECUTING": (
+                "⚡  EXECUTING...",
+                "Running your command..."
+            ),
+
+            "ACTIVATED": (
+                "●  NOVA ACTIVATED",
+                "I'm listening..."
+            ),
+
+            "DISABLED": (
+                "○  NOVA SLEEPING",
+                "Hands-free mode is disabled."
+            )
+        }
+
+        title, subtitle = status_map.get(
+            status,
+            (
+                "◉  NOVA",
+                "Ready..."
+            )
+        )
+
+        self.status_label.setText(title)
+        self.status_subtitle.setText(subtitle)    

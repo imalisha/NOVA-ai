@@ -139,10 +139,10 @@ class CommandRouter:
         ]
 
         # ====================================================
-        # FOLDERS
+        # FOLDERS - DOWNLOADS
         # ====================================================
 
-        self.downloads_phrases = [
+        self.open_downloads_phrases = [
             "open downloads",
             "open download",
             "downloads kholo",
@@ -155,7 +155,24 @@ class CommandRouter:
             "ڈاؤن لوڈ کھولو",
         ]
 
-        self.desktop_phrases = [
+        self.close_downloads_phrases = [
+            "close downloads",
+            "close download",
+            "downloads band karo",
+            "downloads band kar do",
+            "downloads band kar de",
+            "downloads band kar deo",
+            "download band karo",
+            "download band kar do",
+            "ڈاؤن لوڈز بند کرو",
+            "ڈاؤن لوڈ بند کرو",
+        ]
+
+        # ====================================================
+        # FOLDERS - DESKTOP
+        # ====================================================
+
+        self.open_desktop_phrases = [
             "open desktop",
             "desktop kholo",
             "desktop khol do",
@@ -165,7 +182,21 @@ class CommandRouter:
             "ڈیسک ٹاپ کھول دو",
         ]
 
-        self.documents_phrases = [
+        self.close_desktop_phrases = [
+            "close desktop",
+            "desktop band karo",
+            "desktop band kar do",
+            "desktop band kar de",
+            "desktop band kar deo",
+            "ڈیسک ٹاپ بند کرو",
+            "ڈیسک ٹاپ بند کر دو",
+        ]
+
+        # ====================================================
+        # FOLDERS - DOCUMENTS
+        # ====================================================
+
+        self.open_documents_phrases = [
             "open documents",
             "open document",
             "documents kholo",
@@ -176,7 +207,24 @@ class CommandRouter:
             "ڈاکومنٹس کھولو",
         ]
 
-        self.pictures_phrases = [
+        self.close_documents_phrases = [
+            "close documents",
+            "close document",
+            "documents band karo",
+            "documents band kar do",
+            "documents band kar de",
+            "documents band kar deo",
+            "document band karo",
+            "document band kar do",
+            "دستاویزات بند کرو",
+            "ڈاکومنٹس بند کرو",
+        ]
+
+        # ====================================================
+        # FOLDERS - PICTURES
+        # ====================================================
+
+        self.open_pictures_phrases = [
             "open pictures",
             "open picture folder",
             "pictures kholo",
@@ -184,6 +232,17 @@ class CommandRouter:
             "pictures open kar",
             "pictures open kr",
             "تصاویر کھولو",
+        ]
+
+        self.close_pictures_phrases = [
+            "close pictures",
+            "close picture folder",
+            "pictures band karo",
+            "pictures band kar do",
+            "pictures band kar de",
+            "pictures band kar deo",
+            "picture folder band karo",
+            "تصاویر بند کرو",
         ]
 
         # ====================================================
@@ -213,12 +272,15 @@ class CommandRouter:
         ]
 
         self.volume_up_phrases = [
-            "volume",
-            "volume teez karo",
             "volume up",
             "increase volume",
+            "volume increase",
+            "volume tez karo",
+            "volume teez karo",
             "volume barhao",
+            "volume badhao",
             "awaz barhao",
+            "awaz badhao",
             "آواز بڑھاؤ",
             "والیوم بڑھاؤ",
         ]
@@ -226,6 +288,7 @@ class CommandRouter:
         self.volume_down_phrases = [
             "volume down",
             "decrease volume",
+            "volume decrease",
             "volume kam karo",
             "awaz kam karo",
             "آواز کم کرو",
@@ -370,30 +433,66 @@ class CommandRouter:
             return "CLOSE_EXPLORER"
 
         # ====================================================
-        # FOLDERS
+        # DOWNLOADS
         # ====================================================
 
         if any(
             phrase in command
-            for phrase in self.downloads_phrases
+            for phrase in self.close_downloads_phrases
+        ):
+            return "CLOSE_DOWNLOADS"
+
+        if any(
+            phrase in command
+            for phrase in self.open_downloads_phrases
         ):
             return "OPEN_DOWNLOADS"
 
+        # ====================================================
+        # DESKTOP
+        # ====================================================
+
         if any(
             phrase in command
-            for phrase in self.desktop_phrases
+            for phrase in self.close_desktop_phrases
+        ):
+            return "CLOSE_DESKTOP"
+
+        if any(
+            phrase in command
+            for phrase in self.open_desktop_phrases
         ):
             return "OPEN_DESKTOP"
 
-        if any(
-            phrase in command
-            for phrase in self.documents_phrases
-        ):
-            return "OPEN_DOCUMENTS"
+        # ====================================================
+        # DOCUMENTS
+        # ====================================================
 
         if any(
             phrase in command
-            for phrase in self.pictures_phrases
+            for phrase in self.close_documents_phrases
+        ):
+            return "CLOSE_DOCUMENTS"
+
+        if any(
+            phrase in command
+            for phrase in self.open_documents_phrases
+        ):
+            return "OPEN_DOCUMENTS"
+
+        # ====================================================
+        # PICTURES
+        # ====================================================
+
+        if any(
+            phrase in command
+            for phrase in self.close_pictures_phrases
+        ):
+            return "CLOSE_PICTURES"
+
+        if any(
+            phrase in command
+            for phrase in self.open_pictures_phrases
         ):
             return "OPEN_PICTURES"
 
