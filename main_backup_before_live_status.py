@@ -12,7 +12,6 @@ from PySide6.QtWidgets import (
     QFrame,
     QPushButton,
     QGraphicsDropShadowEffect,
-    QMessageBox,
 )
 
 from PySide6.QtCore import (
@@ -31,7 +30,6 @@ from PySide6.QtGui import QColor
 
 from app.services.speech import SpeechService
 from app.services.history import HistoryService
-from app.services.system_monitor import SystemMonitorService
 
 from app.commands.executor import CommandExecutor
 
@@ -327,8 +325,6 @@ class NovaWindow(QMainWindow):
 
         self.history_service = HistoryService()
 
-        self.system_monitor = SystemMonitorService()
-
         self.voice_worker = None
         self.hands_free_worker = None
 
@@ -343,144 +339,6 @@ class NovaWindow(QMainWindow):
         # ----------------------------------------------------
 
         self.start_clock()
-        self.start_system_monitor()
-
-    # ========================================================
-    # SYSTEM MONITOR
-    # ========================================================
-
-    def start_system_monitor(self):
-
-        self.system_monitor_timer = QTimer(
-            self
-        )
-
-        self.system_monitor_timer.timeout.connect(
-            self.update_system_monitor
-        )
-
-        self.system_monitor_timer.start(
-            2000
-        )
-
-        self.update_system_monitor()
-
-    def update_system_monitor(self):
-
-        info = self.system_monitor.get_system_info()
-
-        self.dashboard.update_system_info(
-            info
-        )
-
-        # ========================================================
-    # POWER CONFIRMATION
-    # ========================================================
-
-    def confirm_power_action(self, action):
-        self.update_nova_status_ui(
-            "CONFIRMING"
-        )
-
-        if action == "SHUTDOWN":
-
-            title = "Shutdown NOVA"
-            message = (
-                "Are you sure you want to shut down "
-                "the computer?"
-            )
-
-        elif action == "RESTART":
-
-            title = "Restart NOVA"
-            message = (
-                "Are you sure you want to restart "
-                "the computer?"
-            )
-
-        else:
-
-            return
-
-        result = QMessageBox.question(
-            self,
-            title,
-            message,
-            QMessageBox.StandardButton.Yes
-            | QMessageBox.StandardButton.No,
-            QMessageBox.StandardButton.No
-        )
-
-        if result == QMessageBox.StandardButton.Yes:
-
-            if action == "SHUTDOWN":
-
-                self.perform_shutdown()
-
-            elif action == "RESTART":
-
-                self.perform_restart()
-
-        else:
-
-            print(
-                "NOVA: Power action cancelled."
-            )
-
-            self.update_nova_status_ui(
-                "WAITING"
-            )
-
-        # ========================================================
-    # SHUTDOWN
-    # ========================================================
-
-    def perform_shutdown(self):
-
-        print(
-            "NOVA: Shutdown confirmed."
-        )
-
-        self.update_nova_status_ui(
-            "EXECUTING"
-        )
-
-        import subprocess
-
-        subprocess.Popen(
-            [
-                "shutdown",
-                "/s",
-                "/t",
-                "5"
-            ]
-        )
-
-
-    # ========================================================
-    # RESTART
-    # ========================================================
-
-    def perform_restart(self):
-
-        print(
-            "NOVA: Restart confirmed."
-        )
-
-        self.update_nova_status_ui(
-            "EXECUTING"
-        )
-
-        import subprocess
-
-        subprocess.Popen(
-            [
-                "shutdown",
-                "/r",
-                "/t",
-                "5"
-            ]
-        )
 
     # ========================================================
     # SHADOW
@@ -762,22 +620,6 @@ class NovaWindow(QMainWindow):
         )
 
         # ----------------------------------------------------
-        # NOVA LIVE STATUS
-        # ----------------------------------------------------
-
-        self.nova_status = QLabel(
-            "● WAITING FOR NOVA"
-        )
-
-        self.nova_status.setObjectName(
-            "novaStatusPill"
-        )
-
-        top_layout.addWidget(
-            self.nova_status
-        )
-
-        # ----------------------------------------------------
         # SETTINGS BUTTON
         # ----------------------------------------------------
 
@@ -1030,22 +872,6 @@ class NovaWindow(QMainWindow):
 
 
         /* ==================================================
-           NOVA LIVE STATUS
-           ================================================== */
-
-        QLabel#novaStatusPill {
-            background: #2E1065;
-            color: #C4B5FD;
-            border: 1px solid #7C3AED;
-            border-radius: 10px;
-            padding: 9px 12px;
-            font-size: 12px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-        }
-
-
-        /* ==================================================
            SETTINGS
            ================================================== */
 
@@ -1280,6 +1106,7 @@ class NovaWindow(QMainWindow):
         )
 
         self.hands_free_worker.start()
+        
 
     # ========================================================
     # HANDS-FREE COMMAND RESULT
@@ -1297,35 +1124,7 @@ class NovaWindow(QMainWindow):
             f"NOVA MAIN: Hands-free response = {response}"
         )
 
-        # ====================================================
-        # POWER CONFIRMATION
-        # ====================================================
-
-        if response == "CONFIRM_SHUTDOWN":
-
-            self.confirm_power_action(
-                "SHUTDOWN"
-            )
-
-            response = (
-                "Shutdown requested. "
-                "Please confirm the action."
-            )
-
-        elif response == "CONFIRM_RESTART":
-
-            self.confirm_power_action(
-                "RESTART"
-            )
-
-            response = (
-                "Restart requested. "
-                "Please confirm the action."
-            )
-
-        # ====================================================
-        # SAVE TO HISTORY
-        # ====================================================
+        # Save to history
 
         if command:
 
@@ -1336,80 +1135,12 @@ class NovaWindow(QMainWindow):
 
             self.history_page.refresh()
 
-        # ====================================================
-        # UPDATE ASSISTANT UI
-        # ====================================================
-
-        self.assistant.voice_result(
-            command,
-            response
-        )      
-
-    # ========================================================
-    # HANDS-FREE COMMAND RESULT
-    # ========================================================
-
-        
-        def hands_free_command(self, result):
-
-            command, response = result
-
-            print(
-                f"NOVA MAIN: Hands-free command = {command}"
-            )
-
-            print(
-                f"NOVA MAIN: Hands-free response = {response}"
-            )
-
-        # ====================================================
-        # POWER CONFIRMATION
-        # ====================================================
-
-        if response == "CONFIRM_SHUTDOWN":
-
-            self.confirm_power_action(
-                "SHUTDOWN"
-            )
-
-            response = (
-                "Shutdown requested. "
-                "Please confirm the action."
-            )
-
-        elif response == "CONFIRM_RESTART":
-
-            self.confirm_power_action(
-                "RESTART"
-            )
-
-            response = (
-                "Restart requested. "
-                "Please confirm the action."
-            )
-
-        # ====================================================
-        # SAVE TO HISTORY
-        # ====================================================
-
-        if command:
-
-            self.history_service.add(
-                command,
-                response
-            )
-
-            self.history_page.refresh()
-
-        # ====================================================
-        # UPDATE ASSISTANT UI
-        # ====================================================
+        # Update Assistant UI
 
         self.assistant.voice_result(
             command,
             response
         )
-
 
     # ========================================================
     # HANDS-FREE STATUS
@@ -1420,8 +1151,6 @@ class NovaWindow(QMainWindow):
         print(
             f"NOVA MAIN: Hands-free status = {status}"
         )
-
-        self.update_nova_status_ui(status)
 
     def update_nova_status_ui(self, status):
 
@@ -1460,12 +1189,6 @@ class NovaWindow(QMainWindow):
                 "#FDE68A",
                 "#422006",
                 "#F59E0B"
-            ),
-            "CONFIRMING": (
-                "● CONFIRMATION REQUIRED",
-                "#FCA5A5",
-                "#450A0A",
-                "#DC2626"
             ),
 
             "OFF": (
@@ -1522,7 +1245,6 @@ class NovaWindow(QMainWindow):
             )
 
             self.stop_hands_free()
-            self.update_nova_status_ui("OFF")
 
 
     # ============================================================

@@ -128,18 +128,11 @@ class CommandExecutor:
 
         if action == "SHUTDOWN":
 
-            return (
-                "Shutdown command recognized. "
-                "Confirmation will be required."
-            )
+            return "CONFIRM_SHUTDOWN"
 
         if action == "RESTART":
 
-            return (
-                "Restart command recognized. "
-                "Confirmation will be required."
-            )
-
+            return "CONFIRM_RESTART"
         # ====================================================
         # UNKNOWN
         # ====================================================

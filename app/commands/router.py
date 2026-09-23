@@ -322,6 +322,7 @@ class CommandRouter:
 
         self.shutdown_phrases = [
             "shutdown computer",
+            "shutdown",
             "shutdown pc",
             "shut down computer",
             "shut down pc",
@@ -332,6 +333,7 @@ class CommandRouter:
         ]
 
         self.restart_phrases = [
+            "restart",
             "restart computer",
             "restart pc",
             "reboot computer",
