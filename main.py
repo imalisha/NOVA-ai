@@ -35,6 +35,7 @@ from app.services.system_monitor import SystemMonitorService
 
 from app.commands.executor import CommandExecutor
 
+
 # ============================================================
 # UI PAGES
 # ============================================================
@@ -54,17 +55,26 @@ from app.ui.settings import SettingsPage
 class VoiceWorker(QThread):
 
     finished = Signal(object)
+    status_changed = Signal(str)
+    command_detected = Signal(object)
 
     def __init__(self):
+
         super().__init__()
 
         self.speech = SpeechService()
         self.executor = CommandExecutor()
 
+        self.running = True
+
+    def stop(self):
+
+        self.running = False
+
     def run(self):
 
         print(
-            "NOVA HANDS-FREE: Started"
+            "NOVA VOICE: Started"
         )
 
         self.status_changed.emit(
@@ -92,16 +102,14 @@ class VoiceWorker(QThread):
             # ====================================================
 
             print(
-                "NOVA HANDS-FREE: NOVA activated!"
+                "NOVA VOICE: NOVA activated!"
             )
 
             self.status_changed.emit(
                 "ACTIVATED"
             )
 
-            # Small delay so UI can visibly show activation
-            import time
-            time.sleep(0.3)
+            self.msleep(300)
 
             # ====================================================
             # LISTEN FOR COMMAND
@@ -129,15 +137,14 @@ class VoiceWorker(QThread):
             # ====================================================
 
             print(
-                f"NOVA HANDS-FREE: Command = {command}"
+                f"NOVA VOICE: Command = {command}"
             )
 
             self.status_changed.emit(
                 "PROCESSING"
             )
 
-            import time
-            time.sleep(0.2)
+            self.msleep(200)
 
             # ====================================================
             # EXECUTE
@@ -152,7 +159,7 @@ class VoiceWorker(QThread):
             )
 
             print(
-                f"NOVA HANDS-FREE: Response = {response}"
+                f"NOVA VOICE: Response = {response}"
             )
 
             # ====================================================
@@ -175,8 +182,10 @@ class VoiceWorker(QThread):
             )
 
         print(
-            "NOVA HANDS-FREE: Worker stopped"
+            "NOVA VOICE: Worker stopped"
         )
+
+
 # ============================================================
 # HANDS-FREE VOICE WORKER
 # ============================================================
@@ -214,9 +223,13 @@ class HandsFreeWorker(QThread):
 
     def run(self):
 
-        print("NOVA HANDS-FREE: Started")
+        print(
+            "NOVA HANDS-FREE: Started"
+        )
 
-        self.status_changed.emit("WAITING")
+        self.status_changed.emit(
+            "WAITING"
+        )
 
         while self.running:
 
@@ -224,7 +237,9 @@ class HandsFreeWorker(QThread):
             # 1. WAITING FOR WAKE WORD
             # ==============================================
 
-            wake_detected = self.speech.listen_for_wake_word()
+            wake_detected = (
+                self.speech.listen_for_wake_word()
+            )
 
             if not self.running:
                 break
@@ -236,18 +251,25 @@ class HandsFreeWorker(QThread):
             # 2. NOVA ACTIVATED
             # ==============================================
 
-            print("NOVA HANDS-FREE: NOVA activated!")
+            print(
+                "NOVA HANDS-FREE: NOVA activated!"
+            )
 
-            self.status_changed.emit("ACTIVATED")
+            self.status_changed.emit(
+                "ACTIVATED"
+            )
 
-            # Small pause so user can see the status
-            self.msleep(300)
+            self.msleep(
+                300
+            )
 
             # ==============================================
             # 3. LISTENING FOR COMMAND
             # ==============================================
 
-            self.status_changed.emit("LISTENING")
+            self.status_changed.emit(
+                "LISTENING"
+            )
 
             command = self.speech.listen()
 
@@ -255,42 +277,69 @@ class HandsFreeWorker(QThread):
                 break
 
             if not command:
-                self.status_changed.emit("WAITING")
+
+                self.status_changed.emit(
+                    "WAITING"
+                )
+
                 continue
 
-            print(f"NOVA HANDS-FREE: Command = {command}")
+            print(
+                f"NOVA HANDS-FREE: Command = {command}"
+            )
 
             # ==============================================
             # 4. PROCESSING COMMAND
             # ==============================================
 
-            self.status_changed.emit("PROCESSING")
+            self.status_changed.emit(
+                "PROCESSING"
+            )
 
-            self.msleep(200)
+            self.msleep(
+                200
+            )
 
             # ==============================================
             # 5. EXECUTING COMMAND
             # ==============================================
 
-            self.status_changed.emit("EXECUTING")
+            self.status_changed.emit(
+                "EXECUTING"
+            )
 
-            response = self.executor.execute(command)
+            response = self.executor.execute(
+                command
+            )
 
-            print(f"NOVA HANDS-FREE: Response = {response}")
+            print(
+                f"NOVA HANDS-FREE: Response = {response}"
+            )
 
             # ==============================================
             # 6. SEND RESULT TO UI
             # ==============================================
 
-            self.command_detected.emit((command, response))
+            self.command_detected.emit(
+                (
+                    command,
+                    response
+                )
+            )
 
             # ==============================================
             # 7. BACK TO WAITING
             # ==============================================
 
-            self.status_changed.emit("WAITING")
+            self.status_changed.emit(
+                "WAITING"
+            )
 
-        print("NOVA HANDS-FREE: Worker stopped")
+        print(
+            "NOVA HANDS-FREE: Worker stopped"
+        )
+
+
 # ============================================================
 # NOVA WINDOW
 # ============================================================
@@ -330,6 +379,7 @@ class NovaWindow(QMainWindow):
         self.system_monitor = SystemMonitorService()
 
         self.voice_worker = None
+
         self.hands_free_worker = None
 
         # ----------------------------------------------------
@@ -343,6 +393,11 @@ class NovaWindow(QMainWindow):
         # ----------------------------------------------------
 
         self.start_clock()
+
+        # ----------------------------------------------------
+        # SYSTEM MONITOR
+        # ----------------------------------------------------
+
         self.start_system_monitor()
 
     # ========================================================
@@ -359,10 +414,12 @@ class NovaWindow(QMainWindow):
             self.update_system_monitor
         )
 
+        # Update every 2 seconds
         self.system_monitor_timer.start(
             2000
         )
 
+        # Update immediately
         self.update_system_monitor()
 
     def update_system_monitor(self):
@@ -373,11 +430,15 @@ class NovaWindow(QMainWindow):
             info
         )
 
-        # ========================================================
+    # ========================================================
     # POWER CONFIRMATION
     # ========================================================
 
-    def confirm_power_action(self, action):
+    def confirm_power_action(
+        self,
+        action
+    ):
+
         self.update_nova_status_ui(
             "CONFIRMING"
         )
@@ -385,6 +446,7 @@ class NovaWindow(QMainWindow):
         if action == "SHUTDOWN":
 
             title = "Shutdown NOVA"
+
             message = (
                 "Are you sure you want to shut down "
                 "the computer?"
@@ -393,12 +455,17 @@ class NovaWindow(QMainWindow):
         elif action == "RESTART":
 
             title = "Restart NOVA"
+
             message = (
                 "Are you sure you want to restart "
                 "the computer?"
             )
 
         else:
+
+            self.update_nova_status_ui(
+                "WAITING"
+            )
 
             return
 
@@ -431,7 +498,7 @@ class NovaWindow(QMainWindow):
                 "WAITING"
             )
 
-        # ========================================================
+    # ========================================================
     # SHUTDOWN
     # ========================================================
 
@@ -455,7 +522,6 @@ class NovaWindow(QMainWindow):
                 "5"
             ]
         )
-
 
     # ========================================================
     # RESTART
@@ -874,6 +940,7 @@ class NovaWindow(QMainWindow):
         self.settings_page.hands_free_changed.connect(
             self.hands_free_setting_changed
         )
+
         if self.settings_page.hands_free_checkbox.isChecked():
 
             QTimer.singleShot(
@@ -894,7 +961,7 @@ class NovaWindow(QMainWindow):
             1
         )
 
-                # ====================================================
+        # ====================================================
         # GLOBAL STYLE
         # ====================================================
 
@@ -1250,7 +1317,34 @@ class NovaWindow(QMainWindow):
             self.voice_finished
         )
 
+        self.voice_worker.command_detected.connect(
+            self.voice_command_detected
+        )
+
+        self.voice_worker.status_changed.connect(
+            self.update_nova_status_ui
+        )
+
         self.voice_worker.start()
+
+    # ========================================================
+    # VOICE COMMAND DETECTED
+    # ========================================================
+
+    def voice_command_detected(
+        self,
+        result
+    ):
+
+        command, response = result
+
+        self.voice_finished(
+            (
+                command,
+                response
+            )
+        )
+
     # ========================================================
     # START HANDS-FREE MODE
     # ========================================================
@@ -1285,7 +1379,10 @@ class NovaWindow(QMainWindow):
     # HANDS-FREE COMMAND RESULT
     # ========================================================
 
-    def hands_free_command(self, result):
+    def hands_free_command(
+        self,
+        result
+    ):
 
         command, response = result
 
@@ -1343,87 +1440,33 @@ class NovaWindow(QMainWindow):
         self.assistant.voice_result(
             command,
             response
-        )      
-
-    # ========================================================
-    # HANDS-FREE COMMAND RESULT
-    # ========================================================
-
-        
-        def hands_free_command(self, result):
-
-            command, response = result
-
-            print(
-                f"NOVA MAIN: Hands-free command = {command}"
-            )
-
-            print(
-                f"NOVA MAIN: Hands-free response = {response}"
-            )
-
-        # ====================================================
-        # POWER CONFIRMATION
-        # ====================================================
-
-        if response == "CONFIRM_SHUTDOWN":
-
-            self.confirm_power_action(
-                "SHUTDOWN"
-            )
-
-            response = (
-                "Shutdown requested. "
-                "Please confirm the action."
-            )
-
-        elif response == "CONFIRM_RESTART":
-
-            self.confirm_power_action(
-                "RESTART"
-            )
-
-            response = (
-                "Restart requested. "
-                "Please confirm the action."
-            )
-
-        # ====================================================
-        # SAVE TO HISTORY
-        # ====================================================
-
-        if command:
-
-            self.history_service.add(
-                command,
-                response
-            )
-
-            self.history_page.refresh()
-
-        # ====================================================
-        # UPDATE ASSISTANT UI
-        # ====================================================
-
-        self.assistant.voice_result(
-            command,
-            response
         )
-
 
     # ========================================================
     # HANDS-FREE STATUS
     # ========================================================
 
-    def hands_free_status(self, status):
+    def hands_free_status(
+        self,
+        status
+    ):
 
         print(
             f"NOVA MAIN: Hands-free status = {status}"
         )
 
-        self.update_nova_status_ui(status)
+        self.update_nova_status_ui(
+            status
+        )
 
-    def update_nova_status_ui(self, status):
+    # ========================================================
+    # UPDATE NOVA LIVE STATUS
+    # ========================================================
+
+    def update_nova_status_ui(
+        self,
+        status
+    ):
 
         status_map = {
 
@@ -1461,6 +1504,7 @@ class NovaWindow(QMainWindow):
                 "#422006",
                 "#F59E0B"
             ),
+
             "CONFIRMING": (
                 "● CONFIRMATION REQUIRED",
                 "#FCA5A5",
@@ -1478,10 +1522,17 @@ class NovaWindow(QMainWindow):
 
         text, foreground, background, border = status_map.get(
             status,
-            ("● NOVA", "#E2E8F0", "#1E293B", "#475569")
+            (
+                "● NOVA",
+                "#E2E8F0",
+                "#1E293B",
+                "#475569"
+            )
         )
 
-        self.nova_status.setText(text)
+        self.nova_status.setText(
+            text
+        )
 
         self.nova_status.setStyleSheet(
             f"""
@@ -1497,11 +1548,14 @@ class NovaWindow(QMainWindow):
             """
         )
 
-    # ============================================================
+    # ========================================================
     # HANDS-FREE SETTING CONTROL
-    # ============================================================
+    # ========================================================
 
-    def hands_free_setting_changed(self, enabled):
+    def hands_free_setting_changed(
+        self,
+        enabled
+    ):
 
         print(
             f"NOVA MAIN: Hands-free setting changed = {enabled}"
@@ -1522,12 +1576,14 @@ class NovaWindow(QMainWindow):
             )
 
             self.stop_hands_free()
-            self.update_nova_status_ui("OFF")
 
+            self.update_nova_status_ui(
+                "OFF"
+            )
 
-    # ============================================================
+    # ========================================================
     # STOP HANDS-FREE MODE
-    # ============================================================
+    # ========================================================
 
     def stop_hands_free(self):
 
@@ -1550,16 +1606,20 @@ class NovaWindow(QMainWindow):
         print(
             "NOVA MAIN: Hands-free mode stopped"
         )
+
     # ========================================================
     # VOICE FINISHED
     # ========================================================
 
-    def voice_finished(self, result):
+    def voice_finished(
+        self,
+        result
+    ):
 
         command, response = result
 
         print(
-            f"NOVA MAIN: Voice finished"
+            "NOVA MAIN: Voice finished"
         )
 
         print(
@@ -1592,6 +1652,11 @@ class NovaWindow(QMainWindow):
 
         self.voice_worker = None
 
+        self.update_nova_status_ui(
+            "WAITING"
+        )
+
+
 # ============================================================
 # APPLICATION
 # ============================================================
@@ -1613,6 +1678,8 @@ def main():
     window = NovaWindow()
 
     window.show()
+
+    # Hands-free is controlled from Settings.
     # window.start_hands_free()
 
     sys.exit(

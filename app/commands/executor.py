@@ -4,6 +4,7 @@ import os
 from app.commands.router import CommandRouter
 from app.services.system import SystemService
 from app.services.files import FileService
+from app.services.whatsapp import WhatsappService
 
 
 class CommandExecutor:
@@ -15,6 +16,7 @@ class CommandExecutor:
         self.system = SystemService()
 
         self.files = FileService()
+        self.whatsapp = WhatsappService()
 
     # ========================================================
     # MAIN EXECUTOR
@@ -51,6 +53,27 @@ class CommandExecutor:
         if action == "OPEN_CHROME":
             return self.open_chrome()
 
+        if action == "OPEN_YOUTUBE":
+            return self.open_youtube()
+
+        if action == "OPEN_FACEBOOK":
+            return self.open_facebook()
+
+        if action == "OPEN_WHATSAPP":
+            return self.open_whatsapp()
+
+        if (
+            isinstance(action,tuple)
+            and action[0] == "OPEN_WHATSAPP_CHAT"
+        ):
+            contact_name = action[1]
+            return self.whatsapp.open_chat(
+                contact_name
+            )
+
+        if action == "CLOSE_WHATSAPP":
+            return self.close_whatsapp()
+        
         if action == "CLOSE_CHROME":
             return self.close_chrome()
 
@@ -249,6 +272,119 @@ class CommandExecutor:
             "Closing Google Chrome."
         )
 
+    # ========================================================
+    # WEBSITES
+    # ========================================================
+
+    def open_youtube(self):
+
+        try:
+
+            subprocess.Popen(
+                [
+                    "cmd",
+                    "/c",
+                    "start",
+                    "",
+                    "https://www.youtube.com"
+                ]
+            )
+
+            return "Opening YouTube."
+
+        except Exception as error:
+
+            print(
+                f"YouTube error: {error}"
+            )
+
+            return "I couldn't open YouTube."
+
+
+    def open_facebook(self):
+
+        try:
+
+            subprocess.Popen(
+                [
+                    "cmd",
+                    "/c",
+                    "start",
+                    "",
+                    "https://www.facebook.com"
+                ]
+            )
+
+            return "Opening Facebook."
+
+        except Exception as error:
+
+            print(
+                f"Facebook error: {error}"
+            )
+
+            return "I couldn't open Facebook."
+
+        # ========================================================
+    # WHATSAPP
+    # ========================================================
+
+    def open_whatsapp(self):
+
+        try:
+
+            subprocess.Popen(
+                [
+                    "cmd",
+                    "/c",
+                    "start",
+                    "",
+                    "chrome",
+                    "--app=https://web.whatsapp.com",
+                    "--new-window"
+                ]
+            )
+
+            return "Opening WhatsApp."
+
+        except Exception as error:
+
+            print(
+                f"WhatsApp error: {error}"
+            )
+
+            return "I couldn't open WhatsApp."
+
+    # ========================================================
+    # CLOSE WHATSAPP
+    # ========================================================
+
+    def close_whatsapp(self):
+
+        try:
+
+            subprocess.run(
+                [
+                    "powershell",
+                    "-Command",
+                    "Get-Process chrome -ErrorAction SilentlyContinue | "
+                    "Where-Object {$_.MainWindowTitle -like '*WhatsApp*'} | "
+                    "Stop-Process -Force"
+                ],
+                capture_output=True,
+                text=True
+            )
+
+            return "Closing WhatsApp."
+
+        except Exception as error:
+
+            print(
+                f"WhatsApp close error: {error}"
+            )
+
+            return "I couldn't close WhatsApp."
+      
     # ========================================================
     # CALCULATOR
     # ========================================================

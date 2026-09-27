@@ -68,6 +68,93 @@ class CommandRouter:
             "کروم بند کر دو",
         ]
 
+        # ====================================================
+        # WEBSITES
+        # ====================================================
+
+        self.open_youtube_phrases = [
+            "open youtube",
+            "youtube kholo",
+            "youtube khol do",
+            "youtube open kar",
+            "youtube open kr",
+            "youtube chalao",
+            "یوٹیوب کھولو",
+            "یوٹیوب کھول دو",
+        ]
+
+        self.close_youtube_phrases = [
+            "close youtube",
+            "exit youtube",
+            "youtube band karo",
+            "youtube band kar do",
+            "youtube band kar de",
+            "youtube band kar deo",
+            "یوٹیوب بند کرو",
+            "یوٹیوب بند کر دو",
+        ]
+
+        self.open_facebook_phrases = [
+            "open facebook",
+            "facebook kholo",
+            "facebook khol do",
+            "facebook open kar",
+            "facebook open kr",
+            "فیس بک کھولو",
+            "فیس بک کھول دو",
+        ]
+
+        self.close_facebook_phrases = [
+            "close facebook",
+            "exit facebook",
+            "facebook band karo",
+            "facebook band kar do",
+            "facebook band kar de",
+            "facebook band kar deo",
+            "فیس بک بند کرو",
+            "فیس بک بند کر دو",
+        ]
+
+        self.open_whatsapp_phrases = [
+            "open whatsapp",
+            "whatsapp kholo",
+            "whatsapp khol do",
+            "whatsapp open kar",
+            "whatsapp open kr",
+            "واٹس ایپ کھولو",
+            "واٹس ایپ کھول دو",
+        ]
+
+        self.close_whatsapp_phrases = [
+            "close whatsapp",
+            "exit whatsapp",
+            "whatsapp band karo",
+            "whatsapp band kar do",
+            "whatsapp band kar de",
+            "whatsapp band kar deo",
+            "واٹس ایپ بند کرو",
+            "واٹس ایپ بند کر دو",
+        ]
+        # ====================================================
+        # WHATSAPP CONTACT CHAT
+        # ====================================================
+
+        self.whatsapp_chat_phrases = [
+            "chat with ",
+            "whatsapp chat with ",
+            "open chat with ",
+            "chat karo ",
+            "chat kar ",
+            "whatsapp pe chat with ",
+            "whatsapp par chat with ",
+            "واٹس ایپ پر چیٹ ",
+            "واٹس ایپ چیٹ "
+        ]
+
+        # ====================================================
+        # CALCULATOR
+        # ====================================================
+
         self.open_calculator_phrases = [
             "open calculator",
             "start calculator",
@@ -91,6 +178,10 @@ class CommandRouter:
             "کیلکولیٹر بند کر دو",
         ]
 
+        # ====================================================
+        # NOTEPAD
+        # ====================================================
+
         self.open_notepad_phrases = [
             "open notepad",
             "start notepad",
@@ -113,6 +204,10 @@ class CommandRouter:
             "نوٹ پیڈ بند کرو",
             "نوٹ پیڈ بند کر دو",
         ]
+
+        # ====================================================
+        # FILE EXPLORER
+        # ====================================================
 
         self.open_explorer_phrases = [
             "open file explorer",
@@ -386,6 +481,65 @@ class CommandRouter:
         ):
             return "CLOSE_CHROME"
 
+        # ====================================================
+        # WEBSITES
+        # ====================================================
+
+        if any(
+            phrase in command
+            for phrase in self.open_youtube_phrases
+        ):
+            return "OPEN_YOUTUBE"
+
+        if any(
+            phrase in command
+            for phrase in self.close_youtube_phrases
+        ):
+            return "CLOSE_YOUTUBE"
+
+        if any(
+            phrase in command
+            for phrase in self.open_facebook_phrases
+        ):
+            return "OPEN_FACEBOOK"
+
+        if any(
+            phrase in command
+            for phrase in self.close_facebook_phrases
+        ):
+            return "CLOSE_FACEBOOK"
+
+        if any(
+            phrase in command
+            for phrase in self.open_whatsapp_phrases
+        ):
+            return "OPEN_WHATSAPP"
+
+        if any(
+            phrase in command
+            for phrase in self.close_whatsapp_phrases
+        ):
+            return "CLOSE_WHATSAPP"
+
+        # ====================================================
+        # WHATSAPP CONTACT CHAT
+        # ====================================================
+
+        for phrase in self.whatsapp_chat_phrases:
+
+            if phrase in command:
+
+                contact_name = command.split(
+                    phrase,
+                    1
+                )[1].strip()
+
+                if contact_name:
+
+                    return (
+                        "OPEN_WHATSAPP_CHAT",
+                        contact_name
+                    )
         # ====================================================
         # CALCULATOR
         # ====================================================
